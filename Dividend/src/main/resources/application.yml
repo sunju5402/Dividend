@@ -19,3 +19,7 @@ spring:
     url: jdbc:h2:mem:dividend;DB_CLOSE_DELAY=-1
     username: sa
     password:
+
+scheduler:
+  scrap:
+    yahoo: "0 0 0 * * *"

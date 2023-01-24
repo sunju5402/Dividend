@@ -10,9 +10,9 @@ import lombok.Data;
 public class ScrapedResult {
 
 	private Company company;
-	private List<Dividend> dividendEntities;
+	private List<Dividend> dividends;
 
 	public ScrapedResult() {
-		this.dividendEntities = new ArrayList<>();
+		this.dividends = new ArrayList<>();
 	}
 }

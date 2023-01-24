@@ -23,7 +23,7 @@ public class CompanyController {
 
 	@GetMapping("/autocomplete")
 	public ResponseEntity<?> autocomplete(@RequestParam String keyword) {
-		return null;
+		return ResponseEntity.ok(companyService.autocomplete(keyword));
 	}
 
 	@GetMapping("")
@@ -38,7 +38,10 @@ public class CompanyController {
 			throw new RuntimeException("ticker is empty");
 		}
 
-		return ResponseEntity.ok(companyService.save(ticker));
+		Company company = companyService.save(ticker);
+		companyService.addAutocompleteKeyword(company.getName());
+
+		return ResponseEntity.ok(company);
 	}
 
 	@DeleteMapping("")

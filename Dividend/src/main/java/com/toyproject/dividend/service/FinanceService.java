@@ -1,5 +1,7 @@
 package com.toyproject.dividend.service;
 
+import static com.toyproject.dividend.model.constants.CacheKey.KEY_FINANCE;
+
 import com.toyproject.dividend.model.Company;
 import com.toyproject.dividend.model.Dividend;
 import com.toyproject.dividend.model.ScrapedResult;
@@ -23,7 +25,7 @@ public class FinanceService {
 	private final DividendRepository dividendRepository;
 
 	// 요청이 자주 들어오고 자주 변경되지 않는 데이터이기에 reids 적용
-	@Cacheable(key = "{#companyName}", value = "finance")
+	@Cacheable(key = "#companyName", value = KEY_FINANCE)
 	public ScrapedResult getDividendByCompanyName(String companyName) {
 		log.info("redis test - search company -> " + companyName);
 

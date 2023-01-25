@@ -1,5 +1,7 @@
 package com.toyproject.dividend.scheduler;
 
+import static com.toyproject.dividend.model.constants.CacheKey.KEY_FINANCE;
+
 import com.toyproject.dividend.model.Company;
 import com.toyproject.dividend.model.ScrapedResult;
 import com.toyproject.dividend.persist.CompanyRepository;
@@ -10,11 +12,14 @@ import com.toyproject.dividend.scraper.YahooFinanceScraper;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@EnableCaching
 @AllArgsConstructor
 public class ScraperScheduler {
 
@@ -22,7 +27,9 @@ public class ScraperScheduler {
 	private final DividendRepository dividendRepository;
 	private final YahooFinanceScraper yahooFinanceScraper;
 
+	@CacheEvict(value = KEY_FINANCE, allEntries = true)
 	@Scheduled(cron = "${scheduler.scrap.yahoo}")
+	// TODO 배치 기능
 	public void yahooFinanceScheduling() {
 		// 저장된 회사 목록 조회
 		List<CompanyEntity> companies = companyRepository.findAll();

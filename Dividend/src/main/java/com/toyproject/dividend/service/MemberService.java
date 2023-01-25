@@ -1,6 +1,7 @@
 package com.toyproject.dividend.service;
 
 import com.toyproject.dividend.model.Auth;
+import com.toyproject.dividend.model.Auth.SignUp;
 import com.toyproject.dividend.persist.MemberRepository;
 import com.toyproject.dividend.persist.entity.MemberEntity;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class MemberService implements UserDetailsService {
 			.orElseThrow(() -> new UsernameNotFoundException("couldn't find user" + username));
 	}
 
-	public MemberEntity register(Auth.SingUp member) {
+	public MemberEntity register(SignUp member) {
 		boolean exists = memberRepository.existsByUsername(member.getUsername());
 		if (exists) {
 			throw new RuntimeException("이미 사용 중인 아이디 입니다.");
@@ -36,7 +37,14 @@ public class MemberService implements UserDetailsService {
 		return memberRepository.save(member.toEntity());
 	}
 
-	public MemberEntity authenticate() {
-		return null;
+	public MemberEntity authenticate(Auth.SignIn member) {
+		MemberEntity user = memberRepository.findByUsername(member.getUsername())
+			.orElseThrow(() -> new RuntimeException("존재하지 않는 ID 입니다."));
+
+		if (!passwordEncoder.matches(member.getPassword(), user.getPassword())) {
+			throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+		}
+
+		return user;
 	}
 }

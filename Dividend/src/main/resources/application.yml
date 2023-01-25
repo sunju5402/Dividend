@@ -1,4 +1,7 @@
 spring:
+  profiles:
+    include: secret
+
   application:
     name: toyproject-dividend
 
@@ -23,6 +26,9 @@ spring:
   redis:
     host: localhost
     port: 6379
+
+  jwt:
+    secret:
 
 scheduler:
   scrap:

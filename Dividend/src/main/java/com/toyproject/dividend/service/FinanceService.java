@@ -2,6 +2,7 @@ package com.toyproject.dividend.service;
 
 import static com.toyproject.dividend.model.constants.CacheKey.KEY_FINANCE;
 
+import com.toyproject.dividend.exception.impl.NoCompanyException;
 import com.toyproject.dividend.model.Company;
 import com.toyproject.dividend.model.Dividend;
 import com.toyproject.dividend.model.ScrapedResult;
@@ -31,7 +32,7 @@ public class FinanceService {
 
 		// 회사명을 기준으로 회사 정보를 조회
 		CompanyEntity company = companyRepository.findByName(companyName)
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 회사명입니다."));
+			.orElseThrow(() -> new NoCompanyException());
 
 		// 조회된 회사 ID로 배당금 정보 조히
 		List<DividendEntity> dividendEntities = dividendRepository.findAllByCompanyId(

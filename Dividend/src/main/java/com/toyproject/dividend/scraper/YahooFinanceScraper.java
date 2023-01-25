@@ -1,5 +1,6 @@
 package com.toyproject.dividend.scraper;
 
+import com.toyproject.dividend.exception.impl.UnexpectedMonthEnumValueException;
 import com.toyproject.dividend.model.Company;
 import com.toyproject.dividend.model.Dividend;
 import com.toyproject.dividend.model.ScrapedResult;
@@ -55,7 +56,7 @@ public class YahooFinanceScraper implements Scraper {
 				String dividend = splits[3];
 
 				if (month < 0) {
-					throw new RuntimeException("Unexpected Mont enum valut -> " + splits[0]);
+					throw new UnexpectedMonthEnumValueException();
 				}
 
 				dividends.add(new Dividend(LocalDateTime.of(year, month, day, 0, 0),

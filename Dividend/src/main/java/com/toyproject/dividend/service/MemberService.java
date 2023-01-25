@@ -1,5 +1,6 @@
 package com.toyproject.dividend.service;
 
+import com.toyproject.dividend.exception.impl.AlreadyExistUserException;
 import com.toyproject.dividend.model.Auth;
 import com.toyproject.dividend.model.Auth.SignUp;
 import com.toyproject.dividend.persist.MemberRepository;
@@ -29,7 +30,7 @@ public class MemberService implements UserDetailsService {
 	public MemberEntity register(SignUp member) {
 		boolean exists = memberRepository.existsByUsername(member.getUsername());
 		if (exists) {
-			throw new RuntimeException("이미 사용 중인 아이디 입니다.");
+			throw new AlreadyExistUserException();
 		}
 
 		member.setPassword(passwordEncoder.encode(member.getPassword()));

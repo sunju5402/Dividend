@@ -1,5 +1,8 @@
 package com.toyproject.dividend.service;
 
+import com.toyproject.dividend.exception.impl.AlreadyExistCompanyException;
+import com.toyproject.dividend.exception.impl.FailToScrapTickerException;
+import com.toyproject.dividend.exception.impl.NoCompanyException;
 import com.toyproject.dividend.model.Company;
 import com.toyproject.dividend.model.ScrapedResult;
 import com.toyproject.dividend.persist.CompanyRepository;
@@ -30,7 +33,7 @@ public class CompanyService {
 	public Company save(String ticker) {
 		boolean exists = companyRepository.existsByTicker(ticker);
 		if (exists) {
-			throw new RuntimeException("already exists ticker -> " + ticker);
+			throw new AlreadyExistCompanyException();
 		}
 		return storeCompanyAndDividend(ticker);
 	}
@@ -44,7 +47,7 @@ public class CompanyService {
 		Company company = yahooFinanceScraper.scrapCompanyByTicker(ticker);
 
 		if (ObjectUtils.isEmpty(company)) {
-			throw new RuntimeException("failed to scrap ticker -> " + ticker);
+			throw new FailToScrapTickerException();
 		}
 
 		// 해당 회사가 존재할 경우, 회사의 배당금 정보를 스크래핑
@@ -84,7 +87,7 @@ public class CompanyService {
 
 	public String deleteCompany(String ticker) {
 		CompanyEntity company = companyRepository.findByTicker(ticker)
-			.orElseThrow(() -> new RuntimeException("존재하지 않는 회사입니다."));
+			.orElseThrow(() -> new NoCompanyException());
 
 		dividendRepository.deleteAllByCompanyId(company.getId());
 		companyRepository.delete(company);
